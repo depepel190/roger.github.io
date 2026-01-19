@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roger-Solutions</title>
+	<link rel="icon" type="image/png" href="img/roger_logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #38bdf8;
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --bg: #0f172a;
+            --border: #334155;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Skeleton Loader */
+        .skeleton {
+            background: linear-gradient(90deg, var(--secondary) 0%, var(--border) 50%, var(--secondary) 100%);
+            background-size: 200% 100%;
+            animation: loading 1.5s ease-in-out infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 2rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .hero-title {
+            height: 80px;
+            margin-bottom: 2rem;
+            
+        }
+
+        .skeleton.hero-title {
+            width: 70%;
+        }
+
+        .hero-subtitle {
+            height: 40px;
+            margin-bottom: 2rem;
+            
+        }
+
+        .skeleton.hero-subtitle {
+            width: 85%;
+        }
+
+        .hero-button {
+            height: 50px;
+            width: 200px;
+            
+        }
+
+        .skeleton.hero-button {
+            display: inline-block;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            height: 50px;
+            margin-bottom: 3rem;
+            width: 40%;
+            
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background-color: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.1);
+        }
+
+        .feature-icon {
+            height: 60px;
+            width: 60px;
+            margin-bottom: 1rem;
+            
+            border-radius: 50%;
+        }
+
+        .feature-title {
+            height: 30px;
+            margin-bottom: 1rem;
+            width: 70%;
+            
+        }
+
+        .feature-text {
+            height: 80px;
+            
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .content-text {
+            height: 250px;
+            
+        }
+
+        .content-image {
+            height: 400px;
+            
+            border-radius: 12px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 4rem 2rem;
+            background-color: var(--secondary);
+            text-align: center;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cta-title {
+            height: 50px;
+            width: 50%;
+            margin: 0 auto 2rem;
+            
+        }
+
+        .cta-text {
+            height: 40px;
+            width: 60%;
+            margin: 0 auto 2rem;
+            
+        }
+
+        .cta-button {
+            height: 50px;
+            width: 220px;
+            
+            display: inline-block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .footer-column {
+            text-align: left;
+        }
+
+        .footer-title {
+            height: 25px;
+            width: 60%;
+            margin-bottom: 1rem;
+            
+        }
+
+        .footer-link {
+            height: 20px;
+            width: 70%;
+            margin-bottom: 0.5rem;
+            
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .section-content {
+                grid-template-columns: 1fr;
+            }
+
+            .content-image {
+                height: 300px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skeleton.hero-title {
+                width: 90%;
+            }
+
+            .skeleton.hero-subtitle {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Roger</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content" id="heroContent">
+            <div class="skeleton hero-title"></div>
+            <div class="skeleton hero-subtitle"></div>
+            <div class="skeleton hero-button"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div id="featureTitle" class="skeleton section-title"></div>
+        
+        <div class="features-grid" id="featuresGrid">
+            <div class="feature-card">
+                <div class="skeleton feature-icon"></div>
+                <div class="skeleton feature-title"></div>
+                <div class="skeleton feature-text"></div>
+            </div>
+            <div class="feature-card">
+                <div class="skeleton feature-icon"></div>
+                <div class="skeleton feature-title"></div>
+                <div class="skeleton feature-text"></div>
+            </div>
+            <div class="feature-card">
+                <div class="skeleton feature-icon"></div>
+                <div class="skeleton feature-title"></div>
+                <div class="skeleton feature-text"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section 1 -->
+    <section class="content-section" id="about">
+        <div id="contentTitle1" class="skeleton section-title"></div>
+        <div class="section-content" id="content1">
+            <div class="skeleton content-text"></div>
+            <div class="skeleton content-image"></div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div id="ctaTitle" class="skeleton cta-title"></div>
+        <div id="ctaText" class="skeleton cta-text"></div>
+        <div id="ctaButton" class="skeleton cta-button"></div>
+    </section>
+
+    <!-- Content Section 2 -->
+    <section class="content-section">
+        <div id="contentTitle2" class="skeleton section-title"></div>
+        <div class="section-content" id="content2">
+            <div class="skeleton content-image"></div>
+            <div class="skeleton content-text"></div>
+        </div>
+    </section>
+	<!-- CONTACT FORM SECTION -->
+    <section id="contact" style="
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.5) 0%, rgba(30, 41, 59, 0.5) 100%);
+        padding: 4rem 1.5rem;
+        position: relative;
+        overflow: hidden;
+    ">
+        <!-- Gradient Background Effect -->
+        <div style="
+            position: absolute;
+            inset: 0;
+            -webkit-clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%);
+            clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%);
+            background: linear-gradient(135deg, rgba(255, 128, 181, 0.15) 0%, rgba(144, 137, 252, 0.15) 100%);
+            z-index: 0;
+        "></div>
+
+        <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 1;">
+            <!-- Header -->
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="
+                    font-size: 2.25rem;
+                    font-weight: 600;
+                    color: var(--text);
+                    margin-bottom: 0.5rem;
+                ">Kontaktiere uns</h2>
+                <p style="
+                    font-size: 1.125rem;
+                    color: var(--text-secondary);
+                    max-width: 500px;
+                    margin: 0 auto;
+                ">Hast du Fragen zu Roger? Wir freuen uns, von dir zu hören!</p>
+            </div>
+
+            <!-- Contact Form -->
+            <form action="https://formsubmit.co/dennislaas22@gmail.com" method="POST" style="max-width: 42rem; margin: 0 auto;">
+                <div style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 1.5rem 2rem;
+                    margin-bottom: 1.5rem;
+                ">
+                    <!-- First Name -->
+                    <div>
+                        <label style="
+                            display: block;
+                            font-size: 0.875rem;
+                            font-weight: 600;
+                            color: var(--text);
+                            margin-bottom: 0.625rem;
+                        ">Vorname</label>
+                        <input type="text" name="first-name" placeholder="Max" style="
+                            width: 100%;
+                            border-radius: 0.375rem;
+                            background-color: rgba(255, 255, 255, 0.05);
+                            padding: 0.625rem 0.875rem;
+                            font-size: 1rem;
+                            color: var(--text);
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            transition: all 0.2s ease;
+                        " onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.05)'" onfocus="this.style.outline='2px solid var(--accent)'; this.style.outlineOffset='-1px'" onblur="this.style.outline='none'" />
+                    </div>
+
+                    <!-- Last Name -->
+                    <div>
+                        <label style="
+                            display: block;
+                            font-size: 0.875rem;
+                            font-weight: 600;
+                            color: var(--text);
+                            margin-bottom: 0.625rem;
+                        ">Nachname</label>
+                        <input type="text" name="last-name" placeholder="Mustermann" style="
+                            width: 100%;
+                            border-radius: 0.375rem;
+                            background-color: rgba(255, 255, 255, 0.05);
+                            padding: 0.625rem 0.875rem;
+                            font-size: 1rem;
+                            color: var(--text);
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            transition: all 0.2s ease;
+                        " onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.05)'" onfocus="this.style.outline='2px solid var(--accent)'; this.style.outlineOffset='-1px'" onblur="this.style.outline='none'" />
+                    </div>
+
+                    <!-- Company -->
+                    <div style="grid-column: span 2;">
+                        <label style="
+                            display: block;
+                            font-size: 0.875rem;
+                            font-weight: 600;
+                            color: var(--text);
+                            margin-bottom: 0.625rem;
+                        ">Unternehmen</label>
+                        <input type="text" name="company" placeholder="Acme GmbH" style="
+                            width: 100%;
+                            border-radius: 0.375rem;
+                            background-color: rgba(255, 255, 255, 0.05);
+                            padding: 0.625rem 0.875rem;
+                            font-size: 1rem;
+                            color: var(--text);
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            transition: all 0.2s ease;
+                        " onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.05)'" onfocus="this.style.outline='2px solid var(--accent)'; this.style.outlineOffset='-1px'" onblur="this.style.outline='none'" />
+                    </div>
+
+                    <!-- Email -->
+                    <div style="grid-column: span 2;">
+                        <label style="
+                            display: block;
+                            font-size: 0.875rem;
+                            font-weight: 600;
+                            color: var(--text);
+                            margin-bottom: 0.625rem;
+                        ">Email</label>
+                        <input type="email" name="email" placeholder="max@example.com" style="
+                            width: 100%;
+                            border-radius: 0.375rem;
+                            background-color: rgba(255, 255, 255, 0.05);
+                            padding: 0.625rem 0.875rem;
+                            font-size: 1rem;
+                            color: var(--text);
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            transition: all 0.2s ease;
+                        " onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.05)'" onfocus="this.style.outline='2px solid var(--accent)'; this.style.outlineOffset='-1px'" onblur="this.style.outline='none'" />
+                    </div>
+
+                    <!-- Message -->
+                    <div style="grid-column: span 2;">
+                        <label style="
+                            display: block;
+                            font-size: 0.875rem;
+                            font-weight: 600;
+                            color: var(--text);
+                            margin-bottom: 0.625rem;
+                        ">Nachricht</label>
+                        <textarea name="message" rows="5" placeholder="Schreib deine Nachricht..." style="
+                            width: 100%;
+                            border-radius: 0.375rem;
+                            background-color: rgba(255, 255, 255, 0.05);
+                            padding: 0.625rem 0.875rem;
+                            font-size: 1rem;
+                            color: var(--text);
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            font-family: inherit;
+                            resize: vertical;
+                            transition: all 0.2s ease;
+                        " onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.08)'" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.05)'" onfocus="this.style.outline='2px solid var(--accent)'; this.style.outlineOffset='-1px'" onblur="this.style.outline='none'"></textarea>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button type="submit" style="
+                        display: inline-block;
+                        padding: 0.875rem 2.5rem;
+                        background-color: var(--accent);
+                        color: var(--primary);
+                        border: none;
+                        border-radius: 0.5rem;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+                    " onmouseover="this.style.backgroundColor='#0284c7'; this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 20px rgba(56, 189, 248, 0.5)'" onmouseout="this.style.backgroundColor='var(--accent)'; this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(56, 189, 248, 0.3)'">
+                        Anfrage senden
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+	
+
+    <script>
+        // Content-Daten
+        const contentData = {
+            hero: {
+                title: "Roger",
+                subtitle: "Ihre Lösung für Penisverlängerungen"
+            },
+            features: {
+                title: "Unsere Leistungen",
+                items: [
+                    {
+                        icon: "🎯",
+                        title: "Datenmanagement",
+                        text: "Roger bietet intelligente Lösungen für sichere Datenverwaltung und Organisation"
+                    },
+                    {
+                        icon: "⚡",
+                        title: "Performance",
+                        text: "Schnelle und zuverlässige Verarbeitung großer Datenmengen in Echtzeit"
+                    },
+                    {
+                        icon: "🔒",
+                        title: "Sicherheit",
+                        text: "Enterprise-Grade Sicherheit und Verschlüsselung für sensible Informationen"
+                    }
+                ]
+            },
+            cta: {
+                title: "Bereit für die nächste Stufe?",
+                text: "Entdecke, wie Roger dein Business transformieren kann",
+                buttonText: "Jetzt starten"
+            }
+        };
+
+        // DOM laden
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeroContent();
+            loadFeaturesContent();
+            loadCtaContent();
+            setTimeout(loadContentSections, 1000);
+        });
+
+        function loadHeroContent() {
+            const heroContent = document.getElementById('heroContent');
+            heroContent.innerHTML = `
+                <h1 style="font-size: 3.5rem; margin-bottom: 1rem; color: var(--accent); font-weight: bold;">
+                    ${contentData.hero.title}
+                </h1>
+                <p style="font-size: 1.3rem; margin-bottom: 2rem; color: var(--text-secondary);">
+                    ${contentData.hero.subtitle}
+                </p>
+                <button onclick="alert('Button geklickt!')" style="
+                    padding: 14px 40px;
+                    background-color: var(--accent);
+                    color: var(--primary);
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 10px 25px rgba(56, 189, 248, 0.3)'" 
+                onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
+                    Mehr erfahren
+                </button>
+            `;
+        }
+
+        function loadFeaturesContent() {
+            // Feature Title
+            document.getElementById('featureTitle').innerHTML = `
+                <h2 style="font-size: 2.5rem; color: var(--accent); font-weight: bold;">
+                    ${contentData.features.title}
+                </h2>
+            `;
+
+            // Feature Cards
+            const grid = document.getElementById('featuresGrid');
+            grid.innerHTML = contentData.features.items.map(feature => `
+                <div class="feature-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">${feature.icon}</div>
+                    <h3 style="margin-bottom: 1rem; color: var(--accent); font-size: 1.3rem; font-weight: 600;">
+                        ${feature.title}
+                    </h3>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        ${feature.text}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function loadCtaContent() {
+            document.getElementById('ctaTitle').innerHTML = `
+                <h2 style="font-size: 2.2rem; color: var(--accent);">
+                    ${contentData.cta.title}
+                </h2>
+            `;
+            
+            document.getElementById('ctaText').innerHTML = `
+                <p style="font-size: 1.1rem; color: var(--text-secondary);">
+                    ${contentData.cta.text}
+                </p>
+            `;
+            
+            document.getElementById('ctaButton').innerHTML = `
+                <button onclick="alert('CTA Button geklickt!')" style="
+                    padding: 14px 40px;
+                    background-color: var(--accent);
+                    color: var(--primary);
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: transform 0.3s ease;
+                " onmouseover="this.style.transform='scale(1.05)'" 
+                onmouseout="this.style.transform='scale(1)'">
+                    ${contentData.cta.buttonText}
+                </button>
+            `;
+        }
+
+        function loadContentSections() {
+            // Content Section 1
+            document.getElementById('contentTitle1').innerHTML = `
+                <h2 style="font-size: 2rem; color: var(--accent);">Warum Roger?</h2>
+            `;
+            
+            document.getElementById('content1').innerHTML = `
+                <div style="color: var(--text-secondary); line-height: 1.8;">
+                    <p style="margin-bottom: 1rem;">
+                        Roger revolutioniert die Art und Weise, wie Unternehmen ihre Daten verwalten. 
+                        Mit modernster Technologie und benutzerfreundlicher Oberfläche bieten wir die perfekte Lösung.
+                    </p>
+                    <p style="margin-bottom: 1rem;">
+                        Unsere Plattform wurde von Experten für Experten entwickelt und unterstützt 
+                        Organisationen bei der digitalen Transformation.
+                    </p>
+                </div>
+                <div style="height: 300px; background: linear-gradient(135deg, var(--secondary) 0%, var(--border) 100%); 
+                           border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                    [Bild Platzhalter]
+                </div>
+            `;
+
+            // Content Section 2
+            document.getElementById('contentTitle2').innerHTML = `
+                <h2 style="font-size: 2rem; color: var(--accent);">Für wen ist Roger?</h2>
+            `;
+            
+            document.getElementById('content2').innerHTML = `
+                <div style="height: 300px; background: linear-gradient(135deg, var(--border) 0%, var(--secondary) 100%); 
+                           border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                    [Bild Platzhalter]
+                </div>
+                <div style="color: var(--text-secondary); line-height: 1.8;">
+                    <p style="margin-bottom: 1rem;">
+                        Roger ist ideal für Unternehmen jeder Größe - von Startups bis zu Enterprise-Lösungen.
+                    </p>
+                    <p style="margin-bottom: 1rem;">
+                        Ob Datensicherheit, Compliance oder Performance - Roger deckt alle Anforderungen ab 
+                        und wächst mit deinem Unternehmen mit.
+                    </p>
+                </div>
+            `;
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <div class="skeleton footer-title"></div>
+                <div class="skeleton footer-link"></div>
+                <div class="skeleton footer-link"></div>
+                <div class="skeleton footer-link"></div>
+            </div>
+            <div class="footer-column">
+                <div class="skeleton footer-title"></div>
+                <div class="skeleton footer-link"></div>
+                <div class="skeleton footer-link"></div>
+                <div class="skeleton footer-link"></div>
+            </div>
+            <div class="footer-column">
+                <div class="skeleton footer-title"></div>
+                <div class="skeleton footer-link"></div>
+                <div class="skeleton footer-link"></div>
+                <div class="skeleton footer-link"></div>
+            </div>
+        </div>
+        <p>&copy; 2026 Your Company. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
