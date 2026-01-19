@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roger-Solutions</title>
-	<link rel="icon" type="image/png" href="roger_logo.png">
+	<link rel="icon" type="image/png" href="img/roger_logo.png">
     <style>
         * {
             margin: 0;
@@ -71,7 +71,7 @@
         .skeleton {
             background: linear-gradient(90deg, var(--secondary) 0%, var(--border) 50%, var(--secondary) 100%);
             background-size: 200% 100%;
-            animation: loading 1.5s ease-in-out infinite;
+            animation: loading 5.5s ease-in-out infinite;
             border-radius: 8px;
         }
 
@@ -133,12 +133,23 @@
             margin: 0 auto;
         }
 
-        .section-title {
-            height: 50px;
-            margin-bottom: 3rem;
-            width: 40%;
-            
-        }
+      .section-title {
+    height: 50px;
+    margin: 0 auto 3rem;  /* Automatisch zentriert */
+    width: 100%;          /* Volle Breite nutzen */
+    max-width: 600px;     /* Max. Breite begrenzen */
+    text-align: center;   /* Text zentriert */
+}
+.skeleton.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    margin: 0 auto 3rem;
+    width: 100%;
+    max-width: 600px;
+}
+
 
         .features-grid {
             display: grid;
@@ -228,6 +239,10 @@
             margin: 0 auto 2rem;
             
         }
+        .skeleton.cta-text {
+    animation: none !important;
+    background: var(--secondary) !important;
+}
 
         .cta-button {
             height: 50px;
@@ -235,7 +250,12 @@
             
             display: inline-block;
         }
-
+        /* Skeleton AUS nur für CTA Button */
+        .skeleton.cta-button {
+    animation: none !important;
+    background: var(--secondary) !important;
+}
+    
         /* Footer */
         footer {
             background-color: var(--primary);
@@ -648,21 +668,21 @@
             `;
             
             document.getElementById('ctaButton').innerHTML = `
-                <button onclick="alert('CTA Button geklickt!')" style="
-                    padding: 14px 40px;
-                    background-color: var(--accent);
-                    color: var(--primary);
-                    border: none;
-                    border-radius: 8px;
-                    font-size: 1rem;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: transform 0.3s ease;
-                " onmouseover="this.style.transform='scale(1.05)'" 
-                onmouseout="this.style.transform='scale(1)'">
-                    ${contentData.cta.buttonText}
-                </button>
-            `;
+    <button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})" style="
+        padding: 14px 40px;
+        background-color: var(--accent);
+        color: var(--primary);
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    " onmouseover="this.style.transform='scale(1.05)'" 
+    onmouseout="this.style.transform='scale(1)'">
+        ${contentData.cta.buttonText}
+    </button>
+`;
         }
 
         function loadContentSections() {
@@ -682,9 +702,8 @@
                         Organisationen bei der digitalen Transformation.
                     </p>
                 </div>
-                <div style="height: 300px; background: linear-gradient(135deg, var(--secondary) 0%, var(--border) 100%); 
-                           border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
-                    [Bild Platzhalter]
+                <div style="height: 300px; width: 100%; border-radius: 12px; overflow: hidden;">
+        <img src="img/nikki.jpg" alt="Roger Screenshot" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
             `;
 
@@ -694,10 +713,7 @@
             `;
             
             document.getElementById('content2').innerHTML = `
-                <div style="height: 300px; background: linear-gradient(135deg, var(--border) 0%, var(--secondary) 100%); 
-                           border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
-                    [Bild Platzhalter]
-                </div>
+                
                 <div style="color: var(--text-secondary); line-height: 1.8;">
                     <p style="margin-bottom: 1rem;">
                         Roger ist ideal für Unternehmen jeder Größe - von Startups bis zu Enterprise-Lösungen.
@@ -707,6 +723,8 @@
                         und wächst mit deinem Unternehmen mit.
                     </p>
                 </div>
+                <div style="height: 450px; width: 100%; border-radius: 12px; overflow: hidden;">
+        <img src="img/nikki2.jpg" alt="Roger Screenshot" style="width: 100%; height: 100%; object-fit: cover;">
             `;
         }
     </script>
