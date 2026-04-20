@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Großtagespflege Buntspatzen</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: '#16a34a', //green colorscheme
+          },
+        },
+      },
+    };
+  </script>
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin="anonymous"
+  />
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin="anonymous"
+  ></script>
+  <style>
+    :root {
+      --accent: #16a34a;
+      --body: #f9fafb;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    /* Modal animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    .modal-backdrop {
+      animation: fadeIn 0.2s ease-out;
+    }
+    .modal-content {
+      animation: fadeIn 0.3s ease-out;
+    }
+    /* Gallery transitions */
+    .gallery-slide {
+      transition: opacity 0.5s ease-in-out;
+    }
+    @media (max-width: 767px) {
+      .mobile-safe-scroll {
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Header -->
+  <header class="sticky top-0 z-20 bg-white/90 backdrop-blur shadow">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-full object-cover"></div>
+        <div>
+          <p class="text-sm font-semibold text-accent">Großtagespflege</p>
+          <p class="text-lg font-bold">Buntspatzen</p>
+        </div>
+      </div>
+      <nav class="hidden items-center gap-6 text-sm font-medium text-gray-700 md:flex">
+        <a href="#home" class="hover:text-accent">Start</a>
+        <a href="#konzept" class="hover:text-accent">Konzept</a>
+        <a href="#team" class="hover:text-accent">Team</a>
+        <a href="#haus" class="hover:text-accent">Unser Haus</a>
+        <a href="#kontakt" class="hover:text-accent">Kontakt</a>
+        <a href="#impressum" class="hover:text-accent">Impressum</a>
+      </nav>
+      <button
+        type="button"
+        onclick="toggleMobileNav()"
+        class="rounded-lg p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-accent md:hidden"
+        aria-label="Menü öffnen"
+      >
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-nav" class="hidden border-t border-gray-200 bg-white px-4 pb-4 pt-2 md:hidden">
+      <nav class="mobile-safe-scroll flex flex-col gap-3 text-sm font-medium text-gray-700">
+        <a href="#home" onclick="closeMobileNav()" class="py-1 hover:text-accent">Start</a>
+        <a href="#konzept" onclick="closeMobileNav()" class="py-1 hover:text-accent">Konzept</a>
+        <a href="#team" onclick="closeMobileNav()" class="py-1 hover:text-accent">Team</a>
+        <a href="#haus" onclick="closeMobileNav()" class="py-1 hover:text-accent">Unser Haus</a>
+        <a href="#kontakt" onclick="closeMobileNav()" class="py-1 hover:text-accent">Kontakt</a>
+        <a href="#impressum" onclick="closeMobileNav()" class="py-1 hover:text-accent">Impressum</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <!-- Hero -->
+    <section class="relative min-h-[420px] bg-cover bg-center bg-no-repeat md:min-h-[500px]" style="background-image: url('img/spatzen.png'); background-position-y: 70%;">
+      <!-- Overlay für bessere Lesbarkeit -->
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="relative z-10 mx-auto max-w-6xl px-4 py-16 md:py-20">
+        <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-2">
+          <div class="space-y-6 text-white">
+            <h1 class="text-2xl font-bold leading-tight drop-shadow-lg sm:text-3xl md:text-4xl">
+              Großtagespflege Buntspatzen
+            </h1>
+            <p class="text-base drop-shadow-md sm:text-lg md:text-xl">
+              Raum für Neugier, Spiel und gemeinsames Lernen <br>in Stuttgart-Weilimdorf.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <a
+                href="#kontakt"
+                class="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-green-600 transition-colors"
+              >
+                Kontakt aufnehmen
+              </a>
+              <a
+                href="#konzept"
+                class="rounded-full border-2 border-white bg-white/10 backdrop-blur-sm px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-white/20 transition-colors"
+              >
+                Mehr erfahren
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Konzept -->
+    <section id="konzept" class="mx-auto max-w-6xl px-4 py-16 md:py-20">
+      <div class="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wide text-accent">Konzept</p>
+          <h2 class="mt-2 text-3xl font-bold leading-tight">So arbeiten wir mit den Kindern</h2>
+        </div>
+      </div>
+      <div id="konzept-cards" class="grid gap-6 md:grid-cols-2"></div>
+    </section>
+
+    <!-- Team -->
+    <section id="team" class="bg-white">
+      <div class="mx-auto max-w-6xl px-4 py-16 md:py-20">
+        <div class="mb-8 flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-wide text-accent">Unser Team</p>
+            <h2 class="mt-2 text-3xl font-bold leading-tight">Menschen, die die Großtagespflege tragen</h2>
+          </div>
+        </div>
+        <div class="grid gap-6 md:grid-cols-2">
+          <button
+            type="button"
+            onclick="openTeamModal(0)"
+            class="cursor-pointer rounded-2xl bg-gray-50 p-6 text-left shadow-sm transition-all hover:shadow-md hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent"
+          >
+            <img src="img/photo-1238-kopie-5.jpg" alt="Team-Mitglied" class="h-28 w-28 rounded-full object-cover bg-white ring-2 ring-accent/20" />
+            <h3 class="mt-4 text-lg font-semibold">Ksenia Aab</h3>
+          </button>
+          <button
+            type="button"
+            onclick="openTeamModal(1)"
+            class="cursor-pointer rounded-2xl bg-gray-50 p-6 text-left shadow-sm transition-all hover:shadow-md hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent"
+          >
+            <img src="img/Susanne-1536x2048.jpg" alt="Team-Mitglied Susanne" class="h-28 w-28 rounded-full object-cover bg-white ring-2 ring-accent/20" />
+            <h3 class="mt-4 text-lg font-semibold">Susanne Gert</h3>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Haus -->
+    <section id="haus" class="mx-auto max-w-6xl px-4 py-16 md:py-20">
+      <div class="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wide text-accent">Unser Haus</p>
+          <h2 class="mt-2 text-3xl font-bold leading-tight">Räume zum Entdecken</h2>
+          <p class="mt-3 text-gray-700">
+            Der ehemalige Montessori – Kindergarten bietet optimale Bedingungen für das Wohlsein von kleinen Kindern. Das Haus verfügt über einen großen Essbereich, dem eine moderne Küche angeschlossen ist.</p><br>
+            Der Spielbereich ist in eine Lese- und eine Kuschelecke, einen Bastel- und Kreativbereich aufgeteilt. Auf dem großen Teppich können die Kinder mit Autos spielen, eine Eisenbahnstrecke bauen oder aus bunten Legosteinen schöne Türme errichten. Hier findet auch unser Morgenkreis statt. Nach verschiedenen Begrüßungsliedern lernen die Kinder auch Bewegungslieder, dabei werden Fein- und Grobmotorik spielerisch gefördert.</p><br>
+            Das gemütliche Schlafzimmer bietet Platz für Schaumbettchen, in denen unsere Kinder sich nach dem aktiven Vormittag ausruhen können.</p><br>
+            Im kindgerechten Bad befinden sich Kinderwaschbecken, eine Kindertoilette und der sichtgeschützter Wickelbereich.</p><br>
+            Unser großer Garten ist ein weiteres Highlight für die Kinder. Schattig, mit diversen Spielgeräten ausgestattet ist er ein weiterer Platz zum Entdecken, Spielen und Lachen.</p><br>
+            Sehr gut ist auch die Anbindung an die ÖRV, was die Eltern unserer Kinder schätzen.</p>
+        </div>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+          <h3 class="text-lg font-semibold text-accent">Innenräume</h3>
+          <ul class="mt-3 space-y-2 text-sm text-gray-700">
+            <li>• Spielbereich</li>
+            <li>• Lese- und Kuschelecke</li>
+            <li>• Bastel- und Kreativbereich</li>
+            <li>• Schlafbereich</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+          <h3 class="text-lg font-semibold text-accent">Außenbereich</h3>
+          <ul class="mt-3 space-y-2 text-sm text-gray-700">
+            <li>• Schattig</li>
+            <li>• Diverse Spielgeräte</li>
+            <li>• Große Fläche zum austoben</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Bildergalerie -->
+      <div class="mt-8">
+        <h3 class="mb-4 text-lg font-semibold text-accent">Bildergalerie</h3>
+        <div class="relative overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-100">
+          <div id="gallery-container" class="relative aspect-video w-full">
+            <!-- Gallery slides (Platzhalter) -->
+            <div class="gallery-slide absolute inset-0 opacity-100" data-slide="0">
+              <div class="h-full w-full bg-gradient-to-br from-accent/20 via-green-100 to-accent/10 flex items-center justify-center">
+                <p class="text-gray-600">Platzhalter Bild 1</p>
+              </div>
+            </div>
+            <div class="gallery-slide absolute inset-0 opacity-0" data-slide="1">
+              <div class="h-full w-full bg-gradient-to-br from-blue-100 via-blue-50 to-blue-200 flex items-center justify-center">
+                <p class="text-gray-600">Platzhalter Bild 2</p>
+              </div>
+            </div>
+            <div class="gallery-slide absolute inset-0 opacity-0" data-slide="2">
+              <div class="h-full w-full bg-gradient-to-br from-purple-100 via-purple-50 to-purple-200 flex items-center justify-center">
+                <p class="text-gray-600">Platzhalter Bild 3</p>
+              </div>
+            </div>
+            <div class="gallery-slide absolute inset-0 opacity-0" data-slide="3">
+              <div class="h-full w-full bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-200 flex items-center justify-center">
+                <p class="text-gray-600">Platzhalter Bild 4</p>
+              </div>
+            </div>
+            
+            <!-- Navigation buttons -->
+            <button
+              type="button"
+              onclick="galleryPrev()"
+              class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-accent z-10"
+              aria-label="Vorheriges Bild"
+            >
+              <svg class="h-6 w-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onclick="galleryNext()"
+              class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-accent z-10"
+              aria-label="Nächstes Bild"
+            >
+              <svg class="h-6 w-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+            
+            <!-- Dots indicator -->
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+              <button
+                type="button"
+                onclick="galleryGoTo(0)"
+                class="h-2 w-2 rounded-full bg-white shadow transition-all hover:scale-125 focus:outline-none focus:ring-2 focus:ring-white"
+                aria-label="Bild 1"
+              ></button>
+              <button
+                type="button"
+                onclick="galleryGoTo(1)"
+                class="h-2 w-2 rounded-full bg-white/50 shadow transition-all hover:scale-125 focus:outline-none focus:ring-2 focus:ring-white"
+                aria-label="Bild 2"
+              ></button>
+              <button
+                type="button"
+                onclick="galleryGoTo(2)"
+                class="h-2 w-2 rounded-full bg-white/50 shadow transition-all hover:scale-125 focus:outline-none focus:ring-2 focus:ring-white"
+                aria-label="Bild 3"
+              ></button>
+              <button
+                type="button"
+                onclick="galleryGoTo(3)"
+                class="h-2 w-2 rounded-full bg-white/50 shadow transition-all hover:scale-125 focus:outline-none focus:ring-2 focus:ring-white"
+                aria-label="Bild 4"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kontakt -->
+    <section id="kontakt" class="relative bg-cover bg-center bg-no-repeat" style="background-image: url('img/spatzen2.png'); background-position-y: 50%;">
+      <!-- Overlay für bessere Lesbarkeit -->
+      <div class="absolute inset-0 bg-black/40"></div>
+      <div class="relative z-10 mx-auto max-w-6xl px-4 py-16 md:py-20">
+        <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-wide text-accent text-white drop-shadow-md">Kontakt</p>
+            <h2 class="mt-2 text-3xl font-bold leading-tight text-white drop-shadow-lg">Melden Sie sich gern bei uns</h2>
+          </div>
+        </div>
+
+        <div class="grid gap-8 md:grid-cols-2">
+          <!-- Kontaktinfo & Karte -->
+          <div class="space-y-6">
+            <div class="rounded-2xl bg-white/95 backdrop-blur-sm p-6 shadow-lg">
+              <h3 class="text-lg font-semibold text-accent">Adresse</h3>
+              <p class="mt-2 text-sm text-gray-700">
+                Landauer Str. 23<br/>
+                70499 Stuttgart-Weilimdorf
+              </p>
+              <h4 class="mt-4 text-sm font-semibold text-gray-800">Telefon</h4>
+              <p class="text-sm text-gray-700">0179 4622418</p>
+              <h4 class="mt-4 text-sm font-semibold text-gray-800">E-Mail</h4>
+              <p class="text-sm text-gray-700">info@buntspatzen.de</p>
+              <h4 class="mt-4 text-sm font-semibold text-gray-800">Öffnungszeiten</h4>
+              <p class="text-sm text-gray-700">Mo. - Do. 7:30 - 15:30</p>
+              <p class="text-sm text-gray-700">Fr. 7:30 - 14:00</p>
+            </div>
+
+            <div class="overflow-hidden rounded-2xl shadow-lg ring-2 ring-white/50">
+              <div id="map" class="h-72 w-full bg-gray-200"></div>
+            </div>
+          </div>
+
+          <!-- Formular -->
+          <div class="rounded-2xl bg-white/95 backdrop-blur-sm p-6 shadow-lg">
+            <h3 class="text-lg font-semibold text-accent">Kontaktformular</h3>
+            <form
+              action="https://formspree.io/f/your-form-id"
+              method="POST"
+              class="mt-6 space-y-4"
+            >
+              <div>
+                <label class="text-sm font-medium text-gray-800">Name*</label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  class="mt-2 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50"
+                  placeholder="Ihr Name"
+                />
+              </div>
+              <div>
+                <label class="text-sm font-medium text-gray-800">E-Mail*</label>
+                <input
+                  type="email"
+                  name="_replyto"
+                  required
+                  class="mt-2 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50"
+                  placeholder="name@mail.de"
+                />
+              </div>
+              <div>
+                <label class="text-sm font-medium text-gray-800">Telefon</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  class="mt-2 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50"
+                  placeholder="Optional"
+                />
+              </div>
+              <div>
+                <label class="text-sm font-medium text-gray-800">Nachricht*</label>
+                <textarea
+                  name="message"
+                  rows="4"
+                  required
+                  class="mt-2 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50"
+                  placeholder="Wie können wir helfen?"
+                ></textarea>
+              </div>
+              <label class="flex items-start gap-3 text-sm text-gray-700">
+                <input type="checkbox" required class="mt-1 rounded border-gray-300 text-accent focus:ring-accent" />
+                <span>
+                  Ich stimme zu, dass meine Angaben zur Kontaktaufnahme gespeichert werden.
+                  Details siehe Impressum/Datenschutz.
+                </span>
+              </label>
+              <button
+                type="submit"
+                class="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow hover:bg-green-600"
+              >
+                Abschicken
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impressum & Datenschutz -->
+    <section id="impressum" class="mx-auto max-w-6xl px-4 py-16 md:py-20">
+      <div class="mb-8">
+        <p class="text-sm font-semibold uppercase tracking-wide text-accent">Impressum & Datenschutz</p>
+        <h2 class="mt-2 text-2xl font-bold leading-tight">Rechtliche Hinweise</h2>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2">
+        <button
+          type="button"
+          onclick="openLegalModal('impressum')"
+          class="cursor-pointer rounded-2xl bg-white p-8 text-left shadow-sm ring-1 ring-gray-100 transition-all hover:shadow-md hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent">
+          <h3 class="text-lg font-semibold text-accent">Impressum</h3>
+          <p class="mt-3 text-sm text-gray-700">
+            Angaben gemäß § 5 TMG:<br>
+            Die Buntspatzen GbR</p>
+          <p class="mt-4 text-sm font-medium text-accent">Klicken für Details →</p>
+        </button>
+        <button
+          type="button"
+          onclick="openLegalModal('datenschutz')"
+          class="cursor-pointer rounded-2xl bg-white p-8 text-left shadow-sm ring-1 ring-gray-100 transition-all hover:shadow-md hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent">
+          <h3 class="text-lg font-semibold text-accent">Datenschutz</h3>
+          <p class="mt-3 text-sm text-gray-700">Hinweise zu Datenverarbeitung</p>
+          <p class="mt-4 text-sm font-medium text-accent">Klicken für Details →</p>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-accent text-white">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-sm">
+      <p class="font-semibold">Großtagespflege Buntspatzen</p>
+      <div class="flex flex-wrap gap-4">
+        <a class="underline-offset-4 hover:underline" href="#impressum">Impressum</a>
+        <a class="underline-offset-4 hover:underline" href="#kontakt">Kontakt</a>
+        <a class="underline-offset-4 hover:underline" href="#home">Nach oben</a>
+      </div>
+      <p class="text-white/90 ">
+        made with &#9829 by
+        <a
+          href="https://www.linkedin.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-semibold underline underline-offset-4 hover:text-white"
+        >
+          roger
+        </a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Konzept Modal -->
+  <div id="konzept-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="modal-backdrop fixed inset-0 bg-black/60" onclick="closeKonzeptModal()"></div>
+    <div class="modal-content relative z-10 max-h-[85vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+      <button
+        type="button"
+        onclick="closeKonzeptModal()"
+        class="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-600 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-accent"
+        aria-label="Schließen"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="p-6 md:p-8">
+        <h3 id="konzept-modal-title" class="text-xl font-bold text-gray-700"></h3>
+        <p id="konzept-modal-text" class="mt-4 text-sm leading-6 text-gray-700"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Modal -->
+  <div id="team-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="modal-backdrop fixed inset-0 bg-black/60" onclick="closeTeamModal()"></div>
+    <div class="modal-content relative z-10 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+      <button
+        type="button"
+        onclick="closeTeamModal()"
+        class="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-600 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-accent"
+        aria-label="Schließen"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="p-6 md:p-8">
+        <div id="team-modal-content" class="space-y-6">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legal Modal (Impressum/Datenschutz) -->
+  <div id="legal-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="modal-backdrop fixed inset-0 bg-black/60" onclick="closeLegalModal()"></div>
+    <div class="modal-content relative z-10 max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+      <button
+        type="button"
+        onclick="closeLegalModal()"
+        class="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-600 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-accent"
+        aria-label="Schließen">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="p-6 md:p-8">
+        <!-- Tabs -->
+        <div class="mb-6 flex gap-2 border-b border-gray-200">
+          <button
+            type="button"
+            onclick="switchLegalTab('impressum')"
+            id="legal-tab-impressum"
+            class="px-4 py-2 text-sm font-semibold text-accent border-b-2 border-accent transition-colors">
+            Impressum
+          </button>
+          <button
+            type="button"
+            onclick="switchLegalTab('datenschutz')"
+            id="legal-tab-datenschutz"
+            class="px-4 py-2 text-sm font-semibold text-gray-600 border-b-2 border-transparent hover:text-accent transition-colors">
+            Datenschutz
+          </button>
+        </div>
+        <!-- Content -->
+        <div id="legal-modal-content" class="space-y-4 text-sm text-gray-700">
+          <!-- Content wird dynamisch eingefügt -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const previewLength = 200;
+    const konzeptData = [
+      {
+        title: 'Eingewöhnung',
+        text: 'Die Eingewöhnung lehnt sich an das Berliner Modell. Die Eltern begleiten anfangs ihr Kind und zusammen mit ihm erkunden sie Räume, erleben unseren Alltag. Wenn das Kind zeigt, dass es soweit ist, findet die erste Trennung statt, die langsam erweitert wird. Schritt für Schritt wird das Kind an die volle Betreuungszeit herangeführt. Die Eingewöhnungsphase ist ein sehr wichtiger Bestandteil unserer Arbeit, denn sie verläuft nicht nur auf Seiten des Kindes, sondern auch auf Seite der Eltern. Erst wenn sie ein sicheres Gefühl für ihr Kind haben, gestaltet sich die Trennung harmonisch und die Kinder können so in diese neue Lernphase behutsam eingeführt werden.'
+      },
+      {
+        title: 'Partnerschaft',
+        text: 'Eine gute Partnerschaft zwischen uns und den Eltern macht es dem Kind leichter, sich auf die neue Umgebung einzulassen. Unser Ziel ist es, dass sich alle willkommen, ernst- und wahrgenommen fühlen. Der Aufbau einer vertrauensvollen Beziehung zu den Eltern und ein guter Austausch sind uns sehr wichtig. Die weiteren Partner in unserer Tätigkeit sind das Jugendamt und die Caritas der Stadt Stuttgart. Wenn die Voraussetzungen nach §§23 und 24 erfüllt sind, kann die Förderung der Kindertagespflege beim Jugendamt beantragt werden. Außerdem stehen uns die Fachberaterinnen und Fachberater der Abteilung der Kindertagespflege bei pädagogischen und organisatorischen Fragen zur Seite.'
+      }
+    ];
+
+    function renderKonzeptCards() {
+      const container = document.getElementById('konzept-cards');
+      if (!container) return;
+
+      container.innerHTML = konzeptData
+        .map((item, index) => {
+          const isLong = item.text.length > previewLength;
+          const previewText = isLong ? `${item.text.slice(0, previewLength)}...` : item.text;
+          const readMore = isLong
+            ? '<span class="ml-2 font-medium text-accent">mehr Anzeigen</span>'
+            : '';
+
+          return `
+            <button
+              type="button"
+              onclick="openKonzeptModal(${index})"
+              class="cursor-pointer rounded-2xl bg-white p-6 text-left shadow-sm ring-1 ring-gray-100 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-accent"
+            >
+              <h3 class="text-lg font-semibold text-gray-700">${item.title}</h3>
+              <p class="mt-3 text-sm leading-6 text-gray-700">${previewText}${readMore}</p>
+            </button>
+          `;
+        })
+        .join('');
+    }
+
+    function openKonzeptModal(index) {
+      const modal = document.getElementById('konzept-modal');
+      const title = document.getElementById('konzept-modal-title');
+      const text = document.getElementById('konzept-modal-text');
+      const item = konzeptData[index];
+      if (!modal || !title || !text || !item) return;
+
+      title.textContent = item.title;
+      text.textContent = item.text;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeKonzeptModal() {
+      const modal = document.getElementById('konzept-modal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function toggleMobileNav() {
+      const mobileNav = document.getElementById('mobile-nav');
+      if (!mobileNav) return;
+      mobileNav.classList.toggle('hidden');
+    }
+
+    function closeMobileNav() {
+      const mobileNav = document.getElementById('mobile-nav');
+      if (!mobileNav) return;
+      mobileNav.classList.add('hidden');
+    }
+
+    // Team Modal Data (Platzhalter)
+    const teamData = [
+      {
+        name: 'Ksenia Aab',
+        role: 'Erzieherin',
+        image: 'img/photo-1238-kopie-5.jpg',
+        bio: 'Ich bin Ksenia Aab, geboren und aufgewachsen in Russland, wo ich mein Lehramtsstudium für Fremdsprachen absolvierte. In Deutschland lebe ich mit meiner Familie seit 2006.  Nach dem Studium in frühkindlicher Bildung und Erziehung an der PH Ludwigsburg arbeitete ich über fünf Jahre als Gruppenleitung unter anderem auch im Kleinkindbereich bei der Stadt Stuttgart.In unserer Großtagespflege sehe ich die Möglichkeit, mein Fachwissen, meine beruflichen Erfahrungen und meine pädagogischen Ideen mit Freude und Engagement umzusetzen.',
+        details: 'Erfahrung, Hobbies, etc.]'
+      },
+      {
+        name: 'Susanne Gert',
+        role: 'Erzieherin und Großtagespflege-Leitung',
+        image: 'img/Susanne-1536x2048.jpg',
+        bio: 'Mein Name ist Susanne Gert. In Kasachstan studierte ich Deutsch, Geschichte und Pädagogik. In Deutschland entschied ich mich für das Studium der Sozialpädagogik an der FH Esslingen, das ich im Jahre 2001 erfolgreich abschloss. In meiner beruflichen Laufbahn konnte ich vielfältige Erfahrungen mit Kindern aller Altersgruppen sammeln. Der Wunsch, eigene pädagogische Konzepte zu verwirklichen, führte letztendlich zur Gründung dieser Einrichtung für kleine Menschen, in der sie liebevoll gefördert, begleitet und versorgt werden.',
+        details: '[Weitere Informationen über die Person - Ausbildung, Erfahrung, Hobbies, etc.]'
+      }
+    ];
+
+    // Team Modal Functions
+    function openTeamModal(index) {
+      const modal = document.getElementById('team-modal');
+      const content = document.getElementById('team-modal-content');
+      const member = teamData[index];
+      
+      content.innerHTML = `
+        <div class="flex flex-col items-center gap-6 md:flex-row md:items-start">
+          <img src="${member.image}" alt="${member.name}" class="h-48 w-48 rounded-full object-cover ring-4 ring-accent/20 md:h-56 md:w-56" />
+          <div class="flex-1 space-y-4">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">${member.name}</h3>
+              <p class="mt-1 text-lg font-medium text-accent">${member.role}</p>
+            </div>
+            <div>
+              <h4 class="text-sm font-semibold uppercase tracking-wide text-gray-600">Kurzprofil</h4>
+              <p class="mt-2 text-gray-700">${member.bio}</p>
+            </div>
+            <div>
+              <h4 class="text-sm font-semibold uppercase tracking-wide text-gray-600">Weitere Informationen</h4>
+              <p class="mt-2 text-gray-700">${member.details}</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeTeamModal() {
+      const modal = document.getElementById('team-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    // Legal Modal Functions
+    function openLegalModal(tab) {
+      const modal = document.getElementById('legal-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      switchLegalTab(tab);
+    }
+
+    function closeLegalModal() {
+      const modal = document.getElementById('legal-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function switchLegalTab(tab) {
+      const content = document.getElementById('legal-modal-content');
+      const tabImpressum = document.getElementById('legal-tab-impressum');
+      const tabDatenschutz = document.getElementById('legal-tab-datenschutz');
+      
+      if (tab === 'impressum') {
+        tabImpressum.classList.add('text-accent', 'border-accent');
+        tabImpressum.classList.remove('text-gray-600', 'border-transparent');
+        tabDatenschutz.classList.remove('text-accent', 'border-accent');
+        tabDatenschutz.classList.add('text-gray-600', 'border-transparent');
+        
+        content.innerHTML = `
+          <h3 class="text-xl font-bold text-gray-900">Impressum</h3>
+          <div class="space-y-4 mt-4">
+            <div>
+              <h4 class="font-semibold text-gray-800">Verantwortlich</h4>
+              <p>Angaben gemäß § 5 TMG:<br>
+            Die Buntspatzen GbR</p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-800">Anschrift</h4>
+              <p>Landauer Str. 23<br>70499 Stuttgart-Weilimdorf</p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-800">Kontakt</h4>
+              <p>Telefon: 0179 4622418<br>E-Mail: info@buntspatzen.de</p>
+            </div>
+          </div>
+        `;
+      } else {
+        tabDatenschutz.classList.add('text-accent', 'border-accent');
+        tabDatenschutz.classList.remove('text-gray-600', 'border-transparent');
+        tabImpressum.classList.remove('text-accent', 'border-accent');
+        tabImpressum.classList.add('text-gray-600', 'border-transparent');
+        
+        content.innerHTML = `
+          <h3 class="text-xl font-bold text-gray-900">Datenschutzerklärung</h3>
+          <div class="space-y-4 mt-4">
+
+<p>In dieser Datenschutzerklärung informieren wir Sie über die Verarbeitung personenbezogener Daten bei der Nutzung dieser Website.</p>
+
+<h2>Verantwortlicher</h2>
+
+<p>Verantwortlich für die Datenverarbeitung ist<br>
+Die Buntspatzen GbR,<br>
+Landauer Str. 23,<br>
+70499 Stuttgart,<br>
+E-Mail: info@buntspatzen.de</p>
+
+<h2>Daten beim Websiteaufruf</h2>
+
+<p>Wenn Sie diese Website nur nutzen, um sich zu informieren und keine Daten angeben, dann verarbeiten wir nur die Daten, die zur Anzeige der Website auf dem von Ihnen verwendeten internetfähigen Gerät erforderlich sind. Das sind insbesondere:</p>
+
+<ul>
+    <li>IP-Adresse</li>
+    <li>Datum und Uhrzeit der Anfrage</li>
+    <li>jeweils übertragene Datenmenge</li>
+    <li>die Website, von der die Anforderung kommt</li>
+    <li>Browsertyp und Browserversion</li>
+    <li>Betriebssystem</li>
+</ul>
+
+<p>Rechtsgrundlage für die Verarbeitung dieser Daten sind berechtigte Interessen gemäß Art. 6 Abs. 1 UAbs. 1 Buchstabe f) DSGVO, um die Darstellung der Website grundsätzlich zu ermöglichen.</p>
+
+<p>Darüber hinaus können Sie verschiedene Leistungen auf der Website nutzen, bei der weitere personenbezogene und nicht personenbezogene Daten verarbeitet werden.</p>
+
+<h2>Ihre Rechte</h2>
+
+<p>Als betroffene Person haben Sie folgende Rechte:</p>
+
+<ul>
+    <li>Sie haben ein Auskunftsrecht bezüglich der Sie betreffenden personenbezogenen Daten, die der Verantwortliche verarbeitet (Art. 15 DSGVO).<br></li>
+    <li>Sie haben das Recht auf Berichtigung der Sie betreffenden Daten, wenn diese unrichtig oder unvollständig gespeichert werden (Art. 16 DSGVO).<br></li>
+    <li>Sie haben das Recht auf Löschung (Art. 17 DSGVO).<br></li>
+    <li>Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen (Art. 18 DSGVO).<br></li>
+    <li>Sie haben das Recht auf Datenübertragbarkeit (Art. 20 DSGVO).<br></li>
+    <li>Sie haben ein Widerspruchsrecht gegen die Verarbeitung Sie betreffender personenbezogener Daten (Art. 21 DSGVO).<br></li>
+    <li>Sie haben das Recht nicht einer ausschließlich auf einer automatisierten Verarbeitung – einschließlich Profiling – beruhenden Entscheidung unterworfen zu werden, die Ihnen gegenüber rechtliche Wirkung entfaltet oder sie in ähnlicher Weise erheblich beeinträchtigt (Art. 22 DSGVO).<br></li>
+    <li>Sie haben das Recht, sich bei einem vermuteten Verstoß gegen das Datenschutzrecht bei der zuständigen Aufsichtsbehörde zu beschweren (Art. 77 DSGVO). Zuständig ist die Aufsichtsbehörde an Ihrem üblichen Aufenthaltsort, Arbeitsplatz oder am Ort des vermuteten Verstoßes.</li>
+</ul>
+
+<h2>Einsatz von Cookies</h2>
+
+<p>Beim Besuch der Website können Cookies auf Ihrem Gerät gespeichert werden. Cookies sind kleine Textdateien, die von dem von Ihnen verwendeten Browser gespeichert werden. Cookies können keine Programme ausführen und auch keine Viren auf Ihr Gerät übertragen. Die Stelle, die den Cookie setzt, kann darüber jedoch bestimmte Informationen erhalten. Cookies dienen dazu, das Internetangebot benutzerfreundlicher zu machen. Mithilfe von Cookies kann beispielsweise das Gerät, mit dem diese Website aufgerufen wurde, bei einem erneuten Aufruf erkannt werden.</p>
+
+<p>Durch die Browsereinstellungen lässt sich das Setzen von Cookies einschränken oder verhindern. So kann z. B. nur die Annahme von Cookies, die von Drittanbietern stammen, blockiert werden oder aber auch die Annahme von allen Cookies. Durch das Blockieren sind jedoch möglicherweise nicht mehr alle Funktionen dieser Website nutzbar. Im weiteren Text dieser Datenschutzerklärung informieren wir Sie konkret, an welchen Stellen und zu welchen Zwecken Cookies auf den Seiten zum Einsatz kommen.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Gallery Functions
+    let currentSlide = 0;
+    let galleryInterval = null;
+    const totalSlides = 4;
+
+    function updateGallery() {
+      const slides = document.querySelectorAll('.gallery-slide');
+      const dots = document.querySelectorAll('#gallery-container .rounded-full');
+      
+      slides.forEach((slide, index) => {
+        if (index === currentSlide) {
+          slide.classList.remove('opacity-0');
+          slide.classList.add('opacity-100');
+        } else {
+          slide.classList.remove('opacity-100');
+          slide.classList.add('opacity-0');
+        }
+      });
+      
+      dots.forEach((dot, index) => {
+        if (index === currentSlide) {
+          dot.classList.remove('bg-white/50');
+          dot.classList.add('bg-white');
+        } else {
+          dot.classList.remove('bg-white');
+          dot.classList.add('bg-white/50');
+        }
+      });
+    }
+
+    function galleryNext() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      updateGallery();
+      resetGalleryInterval();
+    }
+
+    function galleryPrev() {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      updateGallery();
+      resetGalleryInterval();
+    }
+
+    function galleryGoTo(index) {
+      currentSlide = index;
+      updateGallery();
+      resetGalleryInterval();
+    }
+
+    function resetGalleryInterval() {
+      if (galleryInterval) {
+        clearInterval(galleryInterval);
+      }
+      galleryInterval = setInterval(galleryNext, 5000);
+    }
+
+    // Touch swipe for gallery
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const galleryContainer = document.getElementById('gallery-container');
+    
+    if (galleryContainer) {
+      galleryContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+      
+      galleryContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+      
+      function handleSwipe() {
+        if (touchEndX < touchStartX - 50) {
+          galleryNext();
+        }
+        if (touchEndX > touchStartX + 50) {
+          galleryPrev();
+        }
+      }
+      
+      // Pause on hover
+      galleryContainer.addEventListener('mouseenter', () => {
+        if (galleryInterval) {
+          clearInterval(galleryInterval);
+        }
+      });
+      
+      galleryContainer.addEventListener('mouseleave', () => {
+        resetGalleryInterval();
+      });
+    }
+
+    // Initialize gallery
+    document.addEventListener('DOMContentLoaded', () => {
+      renderKonzeptCards();
+      updateGallery();
+      resetGalleryInterval();
+    });
+
+    // Close modals on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeKonzeptModal();
+        closeTeamModal();
+        closeLegalModal();
+        closeMobileNav();
+      }
+    });
+
+    // Wait for both DOM and Leaflet to be ready
+    function initMap() {
+      // Check if Leaflet is loaded
+      if (typeof L === 'undefined') {
+        console.error('Leaflet is not loaded! Retrying...');
+        setTimeout(initMap, 200);
+        return;
+      }
+
+      // Default coordinates for Landauer Str. 23, 70499 Stuttgart-Weilimdorf
+      const defaultCoords = [48.8206, 9.1208]; // Stuttgart-Weilimdorf coordinates
+      const defaultZoom = 16;
+      
+      // Check if map element exists
+      const mapElement = document.getElementById('map');
+      if (!mapElement) {
+        console.error('Map element not found!');
+        return;
+      }
+      
+      try {
+        // Initialize map
+        const map = L.map('map', {
+          zoomControl: true,
+          center: defaultCoords,
+          zoom: defaultZoom
+        });
+        
+        // Add OpenStreetMap tiles (OSM is integrated here)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> Mitwirkende',
+          maxZoom: 19
+        }).addTo(map);
+
+        // Address to search
+        const address = 'Landauer Str. 23, 70499 Stuttgart-Weilimdorf';
+
+        // Function to place marker
+        const placeMarker = (coords) => {
+          map.setView(coords, defaultZoom);
+          L.marker(coords)
+            .addTo(map)
+            .bindPopup('<strong>Großtagespflege Buntspatzen</strong><br>Landauer Str. 23<br>70499 Stuttgart-Weilimdorf')
+            .openPopup();
+        };
+
+        // Try to geocode the address, fallback to default coordinates
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`)
+          .then((res) => {
+            if (!res.ok) throw new Error('Geocoding failed');
+            return res.json();
+          })
+          .then((data) => {
+            if (data && data.length > 0) {
+              const { lat, lon } = data[0];
+              placeMarker([parseFloat(lat), parseFloat(lon)]);
+            } else {
+              placeMarker(defaultCoords);
+            }
+          })
+          .catch((error) => {
+            console.warn('Geocoding failed, using default coordinates:', error);
+            placeMarker(defaultCoords);
+          });
+      } catch (error) {
+        console.error('Error initializing map:', error);
+      }
+    }
+
+    // Initialize when both DOM and Leaflet are ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        // Wait for Leaflet to fully load
+        setTimeout(initMap, 100);
+      });
+    } else {
+      // DOM is already ready, wait for Leaflet
+      setTimeout(initMap, 100);
+    }
+  </script>
+</body>
+</html>
